@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  testes:
+  testes-unitarios:
     name: Testes unitarios
     runs-on: ubuntu-latest
 
@@ -24,3 +24,44 @@ jobs:
       - name: Rodar os testes unitarios
         run: pytest tests/unit
 
+  testes-integracao:
+    name: Testes unitarios
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar a linguagem - Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar as dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodar os testes unitarios
+        run: pytest tests/integration
+
+  
+  testes-e2e:
+    name: Testes unitarios
+    needs:
+      - testes-unitarios
+      - testes-integracao
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar a linguagem - Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar as dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodar os testes unitarios
+        run: pytest tests/e2e
